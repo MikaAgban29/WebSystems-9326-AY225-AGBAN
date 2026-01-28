@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MIKAELA MAE P. AGBAN 9 | IT Portfolio</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+  <div class="container header-content">
+
+    <div class="profile">
+      <img src="assets/meme.jpg" alt="Profile Photo">
+      <div>
+        <h1>MIKAELA MAE P. AGBAN</h1>
+        <p class="title">IT Student | Aspiring Web Developer</p>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+  </div>
+</header>
+
+  <!-- ABOUT -->
+  <section id="about" class="section reveal">
+    <div class="container">
+      <h2>About Me</h2>
+      <p>
+        I am an IT student with a strong interest in Programming, digital designs,
+        web systems, and problem-solving. I aim to build practical,
+        user-focused systems while continuously improving my technical skills.
+      </p>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section alt reveal">
+    <div class="container">
+      <h2>Skills</h2>
+
+      <div class="skills-grid">
+        <div>
+            <h3>Programming</h3>
+            <div class="skill-tags programming">
+                <span>Java</span>
+                <span>Python</span>
+                <span>JavaScript</span>
+            </div>
+        </div>
+
+        <div>
+            <h3>Web Development</h3>
+            <div class="skill-tags web">
+                <span>HTML5</span>
+                <span>CSS3</span>
+                <span>GitHub Pages</span>
+            </div>
+        </div>
+
+        <div>
+            <h3>Tools</h3>
+            <div class="skill-tags tools">
+                <span>VS Code</span>
+                <span>Git</span>
+                <span>Canva</span>
+                <span>Figma</span>
+                <span>GIMP</span>
+                <span>Photoshop</span>
+            </div>
+        </div>
+        </div>
+
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="section reveal">
+            <div class="container">
+            <h2>Projects</h2>
+
+            <div class="project-grid">
+                <div class="project-card">
+                <h3>Tourism Website</h3>
+                <p>
+                    A responsive web application showcasing popular tourist destinations,
+                    travel guides, and local attractions. Features interactive maps, image galleries,
+                    and dynamic content to provide visitors with an engaging virtual travel experience.
+                </p>
+                <p class="tech">HTML • CSS • JavaScript</p>
+                <a href="https://github.com/AngellaCasul/Tourism-website.git" target="_blank">
+                    View on GitHub
+                </a>
+                </div>
+
+                <div class="project-card">
+                <h3>Tic Tac 4</h3>
+                <p>
+                     A hybrid strategy game combining Tic Tac Toe and Connect 4 mechanics.
+                    Players aim to align four marks in a row while leveraging Tic Tac Toe-style
+                    logic. Includes interactive gameplay, turn-based mechanics, and visual feedback for a fun and challenging experience.
+                </p>
+                <p class="tech">HTML • CSS • JavaScript</p>
+                <a href="https://github.com/AngellaCasul/tictac4.git" target="_blank">
+                    View on GitHub
+                </a>
+                </div>
+            </div>
+            </div>
+  </section>
+
+  <!-- ACCOMPLISHMENTS -->
+  <section id="experience" class="section alt">
+    <div class="container">
+      <h2>Accomplishments & Tasks</h2>
+      <ul class="bullet-list">
+        <li>Developed multiple academic projects using web technologies</li>
+        <li>Deployed projects using GitHub Pages</li>
+        <li>Collaborated in group projects following coding standards</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications" class="section">
+    <div class="container">
+      <h2>Certifications</h2>
+      <ul class="bullet-list">
+        <li>
+          Networking Basics – Cisco Networking Academy  
+          <a href="https://www.credly.com/badges/17c592c8-2447-4814-8ea8-7acd4c630507/public_url" target="_blank">View Certificate</a>
+        </li>
+      </ul>
+      <div class="certification">
+      <img src="assets/networking-basics.png" alt="Certificate Badge" class="cert-badge">
+      </div>
+    </div>
+  </section>
+
+  <!-- EXTRACURRICULARS -->
+  <section class="section alt">
+    <div class="container">
+      <h2>Extracurricular Activities</h2>
+      <ul class="bullet-list">
+        <li>Member, IT Student Organization</li>
+        <li>Participant, Coding Challenges</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="game-container">
+        <h1>🐍 SNAKE</h1>
+        <div class="score-board">
+            Score: <span id="score">0</span>
+        </div>
+        <div style="position: relative;">
+            <canvas id="gameCanvas" width="500" height="500"></canvas>
+            <div id="gameOverScreen">
+                <h2>GAME OVER!</h2>
+                <p>Final Score: <span id="finalScore">0</span></p>
+                <button class="restart-btn" onclick="restartGame()">PLAY AGAIN</button>
+            </div>
+        </div>
+        
+        <!-- Mobile Control Buttons -->
+        <div class="mobile-controls">
+            <button class="control-btn up" id="btnUp">▲</button>
+            <button class="control-btn left" id="btnLeft">◄</button>
+            <div class="control-btn center">🐍</div>
+            <button class="control-btn right" id="btnRight">►</button>
+            <button class="control-btn down" id="btnDown">▼</button>
+        </div>
+
+        <div class="keyboard-controls">
+            <p><strong>Desktop:</strong> Arrow Keys or WASD</p>
+            <p><strong>Mobile:</strong> Use buttons above</p>
+        </div>
+    </div>
+
+  <!-- FOOTER -->
+  <footer id="contact" class="footer">
+    <div class="container">
+      <p>Email: mm.agban@gmail.com</p>
+      <p>
+        <a href="https://github.com/AngellaCasul">GitHub</a> |
+        <a href="https://linkedin.com/in/username">LinkedIn</a> |
+        <a href="resume.pdf" download>Download Resume</a>
+      </p>
+    </div>
+  </footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>
