@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IGNScrape — Game Database Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-icon">🎮</div>
+      <div class="brand-text">
+        <span class="brand-name">IGN<em>Scrape</em></span>
+        <span class="brand-tag">Game Database Explorer</span>
+      </div>
+    </div>
+    <div class="nav-badge">Powered by BeautifulSoup + Flask</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-label">🕹 Web Scraper Project</div>
+    <h1>Discover &amp; Extract<br/><span>Game Data</span> from IGN</h1>
+    <p>Enter any IGN game browse page to scrape structured data — title, platforms, developer, publisher, release date, and more.</p>
+
+    <div class="search-card">
+      <div class="search-card-inner">
+        <label class="input-label">IGN Browse URL</label>
+        <div class="input-row">
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            <input type="text" id="url-input"
+              placeholder="https://www.ign.com/games?sort=score"
+              value="https://www.ign.com/games?sort=score"/>
+          </div>
+          <button class="scrape-btn" id="scrape-btn" onclick="startScrape()">
+            <span id="btn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </span>
+            <span id="btn-text">Scrape</span>
+          </button>
+        </div>
+
+        <div class="quick-links">
+          <span class="ql-label">Quick:</span>
+          <button onclick="setUrl('https://www.ign.com/games?sort=score')">Top Rated</button>
+          <button onclick="setUrl('https://www.ign.com/games?sort=score&filter=ps5')">PS5</button>
+          <button onclick="setUrl('https://www.ign.com/games?sort=score&filter=switch')">Switch</button>
+          <button onclick="setUrl('https://www.ign.com/games?sort=score&filter=pc')">PC</button>
+          <button onclick="setUrl('https://www.ign.com/games?sort=release&direction=desc')">Newest</button>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div id="progress-wrap">
+        <div class="prog-track">
+          <div class="prog-fill" id="progress-bar"></div>
+        </div>
+        <div class="prog-status">
+          <span id="progress-label">Connecting to IGN…</span>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div id="error-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="error-text"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="stat-card"><div class="stat-num" id="stat-games">—</div><div class="stat-lbl">Games scraped</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-platforms">—</div><div class="stat-lbl">Platforms found</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-devs">—</div><div class="stat-lbl">Developers</div></div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<main id="results-section" style="display:none">
+  <div class="results-bar">
+    <div class="results-info">
+      <h2>Results <span id="result-count">0</span> games</h2>
+    </div>
+    <div class="results-controls">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search-input" placeholder="Search games, devs…" oninput="filterGames()"/>
+      </div>
+      <select id="platform-filter" onchange="filterGames()">
+        <option value="">All Platforms</option>
+      </select>
+      <div class="view-toggle">
+        <button class="vbtn active" id="grid-btn" onclick="setView('grid')" title="Grid view">
+          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="vbtn" id="list-btn" onclick="setView('list')" title="List view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="game-grid"></div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">🎮 <strong>IGNScrape</strong></div>
+    <div class="footer-note">Data sourced from <strong>IGN.com</strong> · Built with Python, Flask &amp; BeautifulSoup · For educational purposes only</div>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
