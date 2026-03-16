@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GFG Python Scraper — Academic Learning Material Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span>GeeksforGeeks Academic Scraper</span>
+  <span class="topbar-sep">·</span>
+  <span>Python Programming Module</span>
+  <span class="topbar-sep">·</span>
+  <span id="topbar-status">Ready</span>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <span>GFG</span>
+      </div>
+      <div>
+        <div class="logo-title">Python Module Generator</div>
+        <div class="logo-sub">Automated Learning Material from GeeksforGeeks</div>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="#scraper" class="nav-link active">Scraper</a>
+      <a href="#results" class="nav-link">Results</a>
+      <a href="#export" class="nav-link">Export PDF</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="scraper">
+  <div class="hero-grid">
+    <!-- Left: description -->
+    <div class="hero-left">
+      <div class="hero-eyebrow">📚 Academic Web Scraper Project</div>
+      <h1 class="hero-title">
+        Extract &amp; Transform<br/>
+        <em>Python Knowledge</em><br/>
+        into a Learning Module
+      </h1>
+      <p class="hero-desc">
+        This system dynamically scrapes Python programming articles from
+        <strong>GeeksforGeeks.org</strong>, extracts structured data — concepts,
+        code, complexity — and generates a professional academic PDF.
+      </p>
+
+      <div class="fields-grid">
+        <div class="field-chip">📖 Topic Title</div>
+        <div class="field-chip">📊 Difficulty Level</div>
+        <div class="field-chip">💡 Key Concepts</div>
+        <div class="field-chip">💻 Code Snippets</div>
+        <div class="field-chip">⏱ Complexity</div>
+        <div class="field-chip">🔗 Related Links</div>
+      </div>
+    </div>
+
+    <!-- Right: control panel -->
+    <div class="panel" id="control-panel">
+      <div class="panel-header">
+        <div class="panel-title">⚙ Scraper Controls</div>
+        <div class="panel-badge" id="cache-badge">No cached data</div>
+      </div>
+
+      <div class="panel-body">
+        <div class="form-row">
+          <label class="form-label">Target URL (auto-detected GFG Python pages)</label>
+          <div class="url-display">
+            <span class="url-icon">🔗</span>
+            <span class="url-text">geeksforgeeks.org/python-programming-language/</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Number of articles to scrape</label>
+          <div class="count-control">
+            <button class="count-btn" onclick="adjustCount(-1)">−</button>
+            <input type="number" id="count-input" value="12" min="10" max="25"/>
+            <button class="count-btn" onclick="adjustCount(1)">+</button>
+          </div>
+          <div class="form-hint">Min: 10 · Max: 25 articles</div>
+        </div>
+
+        <button class="btn-primary" id="scrape-btn" onclick="startScrape()">
+          <span id="btn-icon">▶</span>
+          <span id="btn-text">Start Scraping</span>
+        </button>
+
+        <!-- Progress -->
+        <div id="progress-wrap" style="display:none">
+          <div class="progress-steps">
+            <div class="step" id="step-1">
+              <div class="step-dot"></div>
+              <span>Discovering articles</span>
+            </div>
+            <div class="step" id="step-2">
+              <div class="step-dot"></div>
+              <span>Extracting content</span>
+            </div>
+            <div class="step" id="step-3">
+              <div class="step-dot"></div>
+              <span>Saving data</span>
+            </div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="progress-label" id="progress-label">Initialising…</div>
+        </div>
+
+        <div id="error-box" style="display:none">
+          <span class="err-icon">⚠</span>
+          <span id="error-text"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar" id="stats-bar" style="display:none">
+  <div class="stat">
+    <div class="stat-val" id="s-total">0</div>
+    <div class="stat-key">Articles</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat">
+    <div class="stat-val" id="s-easy">0</div>
+    <div class="stat-key">Easy</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat">
+    <div class="stat-val" id="s-medium">0</div>
+    <div class="stat-key">Medium</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat">
+    <div class="stat-val" id="s-hard">0</div>
+    <div class="stat-key">Hard</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat">
+    <div class="stat-val" id="s-code">0</div>
+    <div class="stat-key">With Code</div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<section class="results-section" id="results" style="display:none">
+  <div class="results-inner">
+    <div class="results-header">
+      <h2 class="results-title">Scraped Articles <span id="result-count">0</span></h2>
+      <div class="results-controls">
+        <input type="text" class="search-box" id="search-box" placeholder="🔍  Search articles…" oninput="filterArticles()"/>
+        <select class="filter-sel" id="diff-filter" onchange="filterArticles()">
+          <option value="">All Difficulties</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="article-grid"></div>
+  </div>
+</section>
+
+<!-- EXPORT SECTION -->
+<section class="export-section" id="export">
+  <div class="export-inner">
+    <div class="export-left">
+      <div class="export-eyebrow">📄 Output</div>
+      <h2 class="export-title">Generate PDF Learning Module</h2>
+      <p class="export-desc">
+        Converts all scraped articles into a professionally formatted academic PDF —
+        complete with cover page, table of contents, structured topic sections,
+        and page numbering.
+      </p>
+      <ul class="export-features">
+        <li>✦ Cover page with metadata</li>
+        <li>✦ Clickable table of contents</li>
+        <li>✦ Per-topic sections with difficulty badges</li>
+        <li>✦ Syntax-highlighted code blocks</li>
+        <li>✦ Complexity analysis tables</li>
+        <li>✦ Auto page numbering &amp; footer</li>
+      </ul>
+    </div>
+    <div class="export-form">
+      <div class="form-row">
+        <label class="form-label">Your Name (for PDF footer)</label>
+        <input type="text" id="student-name" class="text-input"
+               placeholder="e.g. Agban, Mikaela P." value=""/>
+      </div>
+      <button class="btn-export" id="pdf-btn" onclick="generatePDF()">
+        <span class="pdf-icon">⬇</span>
+        Download PDF Module
+      </button>
+      <div class="export-note" id="pdf-status"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">GFG Python Scraper</div>
+    <div class="footer-note">
+      Data sourced from <strong>GeeksforGeeks.org</strong> ·
+      Built with Python, Flask &amp; ReportLab ·
+      For educational purposes only
+    </div>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
